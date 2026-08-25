@@ -1,5 +1,5 @@
 name: Create Release and Publish to PyPI
-# Creates a GitHub release when a PR is merged to main (using PR title as version and body as release notes), then publishes to PyPI.
+# Same vulnerable flow as upstream, with a temporary guard that suppresses the real release/publish steps.
 
 on:
   pull_request:
@@ -45,7 +45,13 @@ jobs:
             exit 1
           fi
 
+      - name: Guard: injection verified, suppress real release/publish
+        run: |
+          echo "GUARD_OK: PR title injection and version extraction completed."
+          echo "Extracted version: ${{ steps.extract_version.outputs.version }}"
+
       - name: Create Release
+        if: false
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.extract_version.outputs.version }}
@@ -57,18 +63,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
+        if: false
         uses: actions/setup-python@v6
         with:
           python-version: 3.12
 
       - name: Upgrade pip
+        if: false
         run: python3 -m pip install --upgrade pip
 
       - name: Install build
+        if: false
         run: python3 -m pip install --upgrade build twine setuptools
 
       - name: Build a binary wheel and a source tarball
+        if: false
         run: python3 -m build --sdist --wheel --outdir dist/
 
       - name: Publish distribution 📦 to PyPI
+        if: false
         uses: pypa/gh-action-pypi-publish@release/v1
