@@ -45,7 +45,7 @@ jobs:
             exit 1
           fi
 
-      - name: Guard: injection verified, suppress real release/publish
+      - name: Guard - injection verified, suppress real release/publish
         run: |
           echo "GUARD_OK: PR title injection and version extraction completed."
           echo "Extracted version: ${{ steps.extract_version.outputs.version }}"
